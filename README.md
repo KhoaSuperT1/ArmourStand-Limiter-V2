@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src=".github/logo.jpg" alt="Java-Cookieee" width="180" />
+
 # ArmorStand-Limiter V2
 
 **Keep armor stand lag machines and leftover custom stands from dragging down TPS.**
