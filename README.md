@@ -51,3 +51,11 @@ mvn package
 ```
 
 Output JAR: `target/ArmorStand-Limiter-v2.1.0.jar`
+
+## Support & Community
+
+- **Discord**: https://discord.gg/NZycRMWrSS
+
+---
+
+*Made with love and care by **Java-Cookieee** & AI.*
