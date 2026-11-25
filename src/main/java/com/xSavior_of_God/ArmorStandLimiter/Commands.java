@@ -1,0 +1,143 @@
+package com.xSavior_of_God.ArmorStandLimiter;
+
+import com.xSavior_of_God.ArmorStandLimiter.utils.Reload;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Chunk;
+import org.bukkit.Location;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+
+import com.xSavior_of_God.ArmorStandLimiter.notifications.Notifications;
+
+public class Commands implements CommandExecutor {
+
+    private boolean hasPermission(CommandSender sender, String permission) {
+        return sender.hasPermission("armorstandlimiter." + permission)
+                || sender.hasPermission("armostandlimiter." + permission);
+    }
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+        if ((sender instanceof ConsoleCommandSender || sender.isOp() || hasPermission(sender, "help"))
+                && (args.length < 1 || args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("?"))) {
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&eArmorStand&fLimiter &6Created by xSavior_of_God"));
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&r"));
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cCorrect Usage: &f/asl reload&a,&f /asl check [chunk/xyz]&a,&f /asl clear [chunk/xyz] "));
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&r"));
+            return true;
+        }
+
+        if ((sender instanceof ConsoleCommandSender || sender.isOp() || hasPermission(sender, "test"))
+                && args.length > 0 && args[0].equalsIgnoreCase("test")) {
+            if (!Bukkit.getWorlds().isEmpty()) {
+                Location loc = new Location(Bukkit.getWorlds().get(0), 1, 2, 3);
+                Notifications.send(loc, 9999);
+                Notifications.send(loc.getChunk(), 9999);
+            }
+            return true;
+        }
+
+        if (sender instanceof Player && hasPermission(sender, "check") && args.length > 0
+                && args[0].equalsIgnoreCase("check")) {
+            boolean isChunk = false;
+            String message = "&cThere are &f{c}&c Armor Stands of which only &f&n{i}&c are detected &7(x{x}, z{z} - {type})";
+            int c = 0;
+            int i = 0;
+
+            if (args.length > 1 && args[1] != null && args[1].equalsIgnoreCase("chunk")) {
+                isChunk = true;
+            }
+
+            final Chunk chunk = ((Player) sender).getLocation().getChunk();
+            if (isChunk) {
+                for (Entity ent : chunk.getEntities()) {
+                    if (ent instanceof ArmorStand) {
+                        c++;
+                        if (Utils.checkArmorStand((ArmorStand) ent)) i++;
+                    }
+                }
+            } else {
+                Location loc = ((Player) sender).getLocation();
+                int X = (int) loc.getX();
+                int Z = (int) loc.getZ();
+
+                for (Entity ent : chunk.getEntities()) {
+                    if (ent instanceof ArmorStand && (X == (int) ent.getLocation().getX() && Z == (int) ent.getLocation().getZ())) {
+                        c++;
+                        if (Utils.checkArmorStand((ArmorStand) ent)) i++;
+                    }
+                }
+            }
+            sender.sendMessage(
+                    ChatColor.translateAlternateColorCodes('&', message.replace("{c}", c + "").replace("{i}", i + "").replace("{x}", chunk.getX() + "")
+                            .replace("{z}", chunk.getZ() + "").replace("{type}", isChunk ? "chunk" : "xyz")));
+            return true;
+        } else if (sender instanceof Player && hasPermission(sender, "clear") && args.length > 0
+                && args[0].equalsIgnoreCase("clear")) {
+            boolean isChunk = false;
+            String message = "&cThere are &f{c}&c Armor Stands of which only &f&n{i}&c are detected &7(x{x}, z{z} - {type}), &aRemoved &f&n{r}&a Armor Stands!";
+            int c = 0;
+            int i = 0;
+            int r = 0;
+
+            if (args.length > 1 && args[1] != null && args[1].equalsIgnoreCase("chunk")) {
+                isChunk = true;
+            }
+
+            final Chunk chunk = ((Player) sender).getLocation().getChunk();
+            if (isChunk) {
+                for (Entity ent : chunk.getEntities()) {
+                    if (ent instanceof ArmorStand) {
+                        c++;
+                        if (Utils.checkArmorStand((ArmorStand) ent)) {
+                            try {
+                                ent.remove();
+                                r++;
+                            } catch (Exception ignored) {
+                            }
+                            i++;
+                        }
+                    }
+                }
+            } else {
+                Location loc = ((Player) sender).getLocation();
+                int X = (int) loc.getX();
+                int Z = (int) loc.getZ();
+
+                for (Entity ent : chunk.getEntities()) {
+                    if (ent instanceof ArmorStand && (X == (int) ent.getLocation().getX() && Z == (int) ent.getLocation().getZ())) {
+                        c++;
+                        if (Utils.checkArmorStand((ArmorStand) ent)) {
+                            i++;
+                            try {
+                                ent.remove();
+                                r++;
+                            } catch (Exception ignored) {
+                            }
+                        }
+                    }
+                }
+            }
+            sender.sendMessage(
+                    ChatColor.translateAlternateColorCodes('&', message.replace("{c}", c + "").replace("{i}", i + "").replace("{r}", r + "").replace("{x}", chunk.getX() + "")
+                            .replace("{z}", chunk.getZ() + "").replace("{type}", isChunk ? "chunk" : "xyz")));
+            return true;
+        } else if (args.length > 0 && args[0].equalsIgnoreCase("reload")
+                && (sender instanceof ConsoleCommandSender || sender.isOp() || hasPermission(sender, "reload"))) {
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6Reloading..."));
+            Reload.reload();
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&aReloaded!"));
+            return true;
+        } else {
+            String msg = Main.noPerms != null ? Main.noPerms : "&cUnknown Command or you don't have permissions!";
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+            return true;
+        }
+    }
+}

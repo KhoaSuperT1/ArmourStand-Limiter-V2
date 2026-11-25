@@ -1,0 +1,57 @@
+name: ArmorStand-Limiter
+main: com.xSavior_of_God.ArmorStandLimiter.Main
+version: maven-version-number
+api-version: '1.21'
+folia-supported: true
+authors: [xSavior_of_God, Cookie]
+softdepend: [ModelEngine, HolographicDisplays]
+commands:
+  asl:
+    description: reload the plugin
+    usage:  /asl
+            /asl reload
+            /asl test
+            /asl check <chunk/xyz>
+permissions:
+  armorstandlimiter.reload:
+    description: you can reload the plugin if you have this permission
+    default: op
+  armorstandlimiter.check:
+    description: you can check the number of ArmorStand in a chunk or block (default is block)
+    default: op
+  armorstandlimiter.clear:
+    description: you can clear the ArmorStand in a chunk or block (default is block)
+    default: op
+  armorstandlimiter.test:
+    description: you can test the notification system
+    default: op
+  armorstandlimiter.help:
+    description: you can view plugin help
+    default: op
+  armorstandlimiter.bypass:
+    description: bypass armor stand placement limit
+    default: op
+  armorstandlimiter.notify:
+    description: receive armor stand limiter notifications
+    default: op
+  armostandlimiter.reload:
+    description: you can reload the plugin if you have this permission
+    default: op
+  armostandlimiter.check:
+    description: you can check the number of ArmorStand in a chunk or block (default is block)
+    default: op
+  armostandlimiter.clear:
+    description: you can clear the ArmorStand in a chunk or block (default is block)
+    default: op
+  armostandlimiter.test:
+    description: you can test the notification system
+    default: op
+  armostandlimiter.help:
+    description: you can view plugin help
+    default: op
+  armostandlimiter.bypass:
+    description: bypass armor stand placement limit
+    default: op
+  armostandlimiter.notify:
+    description: receive armor stand limiter notifications
+    default: op
