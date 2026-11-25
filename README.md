@@ -1,10 +1,13 @@
-# ArmorStand-Limiter (Updated)
+# ArmorStand-Limiter V2
 
 An updated, NMS-free recode of **ArmorStand-Limiter** for **Spigot, Paper, Purpur, Leaf, and Folia (Minecraft 1.21 – 1.26.3)**.
 
 > **Original Code Credit:**
 > Based on the original open-source plugin by **xSavior_of_God**:
 > https://github.com/xSavior-of-God/ArmorStand-Limiter
+
+> **⚠️ Notice (~80% AI-Assisted Code):**
+> Roughly **80%** of this V2 update/recode was written with AI assistance. Although it compiles cleanly against both 1.21.x (Java 21) and 26.3 (Java 25) Paper/Folia APIs, please test it on a staging server before deploying to production.
 
 ## What Changed in v2.1.0
 
